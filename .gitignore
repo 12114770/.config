@@ -1,0 +1,46 @@
+# Ignore everything by default
+*
+
+# Allow this file
+!.gitignore
+
+# ---- Top-level configs you actually want ----
+!nvim/
+!sway/
+!waybar/
+!alacritty/
+!gtk-3.0/
+!gtk-4.0/
+!ghostty/
+!lazygit/
+!foot/
+!starship.toml
+
+# ---- Keep contents of allowed dirs ----
+!nvim/**
+!sway/**
+!waybar/**
+!alacritty/**
+!gtk-3.0/**
+!gtk-4.0/**
+!ghostty/**
+!lazygit/**
+!foot/**
+!starship.toml
+
+# ---- Explicit heavy / machine-specific exclusions ----
+.cache/
+Code/
+chromium/
+google-chrome/
+BraveSoftware/
+discord/
+Slack/
+spotify/
+obs-studio/
+JetBrains/
+VirtualBox/
+libreoffice/
+pulse/
+dconf/
+xfce4/xfconf/xfce-perchannel-xml/keyboard-layout.xml

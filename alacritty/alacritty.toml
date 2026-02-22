@@ -1,0 +1,7 @@
+[general]
+import = [
+  "~/.config/alacritty/themes/alacritty-theme/themes/vscode.toml"
+]
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font" }
