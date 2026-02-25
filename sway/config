@@ -18,14 +18,35 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | wmenu | xargs swaymsg exec --
-
-include /etc/sway/config-vars.d/*
+set $menu exec wofi --show drun --location 1 --xoffset 10 --yoffset 6 --width 520 --allow-images
+  include /etc/sway/config-vars.d/*
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg /usr/share/backgrounds/ubuntu-wallpaper-d.png fill
+
+# Gaps
+gaps inner 8
+gaps outer 4
+
+
+default_border pixel 3
+
+client.focused          #5a5a5a #5a5a5a #ffffff #5a5a5a
+client.focused_inactive #3f3f3f #3f3f3f #dddddd #3f3f3f
+client.unfocused        #262626 #262626 #bbbbbb #262626
+client.urgent           #6a6a6a #6a6a6a #ffffff #6a6a6a
+
+seat seat0 xcursor_theme Bibata-Modern-Ice 24
+
+
+
+# Default-like neutral grey window colors
+
+# Lighter grey borders to separate from bar
+# Balanced grey borders (not too light)
+
 #
 # Example configuration:
 #
@@ -39,11 +60,13 @@ output * bg /usr/share/backgrounds/ubuntu-wallpaper-d.png fill
           timeout 300 'swaylock -f -c 000000' \
           timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
           before-sleep 'swaylock -f -c 000000'
+
+# Brightness keys
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
-exec_always --no-startup-id kanshi
+  exec_always --no-startup-id kanshi
 
 ### Input configuration
 #
@@ -58,7 +81,6 @@ exec_always --no-startup-id kanshi
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
-#
 #
 # screenshots
 # inspiration: https://www.reddit.com/r/swaywm/comments/ghnlea/comment/fqnzxkx/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
@@ -80,11 +102,21 @@ input * {
     xkb_options "compose:ralt"
 }
 
+input type:touchpad {
+    natural_scroll enabled
+    tap enabled
+    tap_button_map lrm
+    dwt enabled
+}
+
 ### Key bindings
 #
 # Basics:
 #
- 
+#
+    # Brightness control
+    bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
+    bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
     bindsym $mod+Ctrl+l exec swaylock -f -c 000000
 
 # Mod+Shift+s → region screenshot → open satty
@@ -228,17 +260,6 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
-    font pango:JetBrainsMono Nerd Font 12
-
-    status_command while date +'%H:%M %d.%m.'; do sleep 60; done
-
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-}
+  exec --no-startup-id waybar
 
 include /etc/sway/config.d/*

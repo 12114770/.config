@@ -1,0 +1,27 @@
+{
+  "layer": "top",
+  "position": "top",
+
+  "modules-left": ["sway/workspaces"],
+  "modules-right": ["network", "battery", "clock"],
+
+  "network": {
+    "format-wifi": "  {essid}",
+    "format-ethernet": "󰈀  Ethernet",
+    "format-disconnected": "󰖪  Offline",
+    "tooltip": true
+  },
+
+  "battery": {
+    "format": "  {capacity}%",
+    "format-charging": " {capacity}%",
+    "states": {
+      "warning": 30,
+      "critical": 15
+    }
+  },
+
+  "clock": {
+    "format": "{:%H:%M  %d.%m.}"
+  }
+  }
