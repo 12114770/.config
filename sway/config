@@ -27,9 +27,6 @@ set $menu exec wofi --show drun --location 1 --xoffset 10 --yoffset 6 --width 52
 output * bg /usr/share/backgrounds/ubuntu-wallpaper-d.png fill
 
 # Gaps
-gaps inner 8
-gaps outer 4
-
 
 default_border pixel 3
 
