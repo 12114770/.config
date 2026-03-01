@@ -27,7 +27,7 @@
 !lazygit/**
 !foot/**
 !starship.toml
-
+!satty/**
 # ---- Explicit heavy / machine-specific exclusions ----
 .cache/
 Code/

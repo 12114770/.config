@@ -3,17 +3,35 @@
   "position": "top",
 
   "modules-left": ["sway/workspaces"],
-  "modules-right": ["network", "battery", "clock"],
+  "modules-right": ["pulseaudio", "network", "bluetooth", "battery", "clock"],
 
   "network": {
-    "format-wifi": "  {essid}",
+    "format-wifi": "   {essid}",
     "format-ethernet": "󰈀  Ethernet",
     "format-disconnected": "󰖪  Offline",
-    "tooltip": true
+    "tooltip": true,
+    "on-click": "nm-connection-editor"
   },
 
+  "pulseaudio": {
+    "format": "{icon} ",
+    "format-muted": "󰝟",
+    "format-icons": {
+      "default": ["", "", ""]
+    },
+    "scroll-step": 5,
+    "on-click": "pavucontrol"
+  },
+
+    "bluetooth": {
+    "format": " ",
+    "format-disabled": "",
+    "format-connected": " {num_connections}",
+    "tooltip": false,
+    "on-click": "blueman-manager"
+  },
   "battery": {
-    "format": "  {capacity}%",
+    "format": "   {capacity}%",
     "format-charging": " {capacity}%",
     "states": {
       "warning": 30,
@@ -24,4 +42,4 @@
   "clock": {
     "format": "{:%H:%M  %d.%m.}"
   }
-  }
+}

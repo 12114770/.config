@@ -4,8 +4,8 @@ set -euo pipefail
 # Make sure cargo-installed binaries are visible even if Sway session PATH is minimal
 export PATH="$HOME/.cargo/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
-mkdir -p "$HOME/Pictures/Screenshots"
-tmp="$(mktemp "$HOME/Pictures/Screenshots/screenshot-XXXXXX.png")"
+mkdir -p "$HOME/pictures/Screenshots"
+tmp="$(mktemp "$HOME/pictures/Screenshots/screenshot-XXXXXX.png")"
 
 grim -g "$(slurp -d)" "$tmp"
 
