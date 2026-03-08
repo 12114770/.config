@@ -10,14 +10,14 @@
     "format-ethernet": "󰈀  Ethernet",
     "format-disconnected": "󰖪  Offline",
     "tooltip": true,
-    "on-click": "nm-connection-editor"
+    "on-click": "iwgtk"
   },
 
   "pulseaudio": {
     "format": "{icon} ",
     "format-muted": "󰝟",
     "format-icons": {
-      "default": ["", "", ""]
+      "default": ["󰕿", "󰖀", "󰕾", "󰕾"]
     },
     "scroll-step": 5,
     "on-click": "pavucontrol"

@@ -53,16 +53,12 @@ seat seat0 xcursor_theme Bibata-Modern-Ice 24
 #
 # Example configuration:
 #
- exec swayidle -w \
-          timeout 300 'swaylock -f -c 000000' \
-          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-          before-sleep 'swaylock -f -c 000000'
+ exec_always --no-startup-id /home/lukas/.config/sway/idle-power.sh
 
 # Brightness keys
 #
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
+# This locks and suspends after 30 minutes on AC power or 5 minutes on battery.
+# It also locks before the computer goes to sleep.
   exec_always --no-startup-id kanshi
 
 ### Input configuration
