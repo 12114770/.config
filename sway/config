@@ -24,7 +24,7 @@ set $menu exec wofi --show drun --location 1 --xoffset 10 --yoffset 6 --width 52
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/ubuntu-wallpaper-d.png fill
+output * bg /home/lukas/.config/wallpapers/kunj-parekh-jSwwSmSCEZk-unsplash.jpg fill
 
 # Gaps
 
@@ -112,7 +112,7 @@ input type:touchpad {
     # Brightness control
     bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
     bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-    bindsym $mod+Ctrl+l exec swaylock -f -c 000000
+    bindsym $mod+Ctrl+l exec /home/lukas/.config/sway/idle-power.sh suspend-now
 
 # Mod+Shift+s → region screenshot → open satty
     bindsym $mod+Shift+s exec ~/.config/sway/satty-shot
@@ -121,6 +121,7 @@ input type:touchpad {
 
     # Kill focused window
     bindsym $mod+Shift+q kill
+    bindsym Ctrl+q kill
 
     # Start your launcher
     bindsym $mod+d exec $menu

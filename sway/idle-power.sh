@@ -4,11 +4,24 @@ set -eu
 
 PIDFILE="${XDG_RUNTIME_DIR:-/tmp}/sway-idle-power.pid"
 LOCK_CMD='swaylock -f -c 000000'
-LOCK_AND_SCREEN_OFF_CMD='swaylock -f -c 000000 && swaymsg "output * dpms off"'
-SCREEN_ON_CMD='swaymsg "output * dpms on"'
-SUSPEND_CMD='systemctl suspend'
 
 child_pid=""
+
+suspend_now() {
+    ${LOCK_CMD} &
+    lock_pid=$!
+
+    sleep 1
+
+    systemctl suspend
+
+    wait "${lock_pid}"
+}
+
+if [ "${1:-}" = "suspend-now" ]; then
+    suspend_now
+    exit 0
+fi
 
 cleanup() {
     if [ -n "${child_pid}" ]; then
@@ -57,18 +70,13 @@ start_swayidle() {
     fi
 
     if [ "${mode}" = "ac" ]; then
-        lock_timeout=1800
+        suspend_timeout=7200
     else
-        lock_timeout=300
+        suspend_timeout=600
     fi
 
-    suspend_timeout=$((lock_timeout * 2))
-
     swayidle -w \
-        timeout "${lock_timeout}" "${LOCK_AND_SCREEN_OFF_CMD}" \
-        timeout "${suspend_timeout}" "${SUSPEND_CMD}" \
-        resume "${SCREEN_ON_CMD}" \
-        before-sleep "${LOCK_CMD}" &
+        timeout "${suspend_timeout}" "/home/lukas/.config/sway/idle-power.sh suspend-now" &
 
     child_pid="$!"
 }
