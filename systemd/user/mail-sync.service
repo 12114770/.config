@@ -1,0 +1,6 @@
+[Unit]
+Description=Synchronize mail to local Maildir
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/aerc/scripts/sync-mail.sh allmail

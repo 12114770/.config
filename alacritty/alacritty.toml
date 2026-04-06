@@ -1,0 +1,12 @@
+[general]
+import = [
+  "~/.config/alacritty/themes/alacritty-theme/themes/vscode.toml"
+]
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font" }
+
+[keyboard]
+bindings = [
+  { key = "N", mods = "Control|Shift", command = { program = "/home/lukas/.local/bin/alacritty-clone-session" } },
+]

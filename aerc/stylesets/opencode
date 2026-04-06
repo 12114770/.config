@@ -1,0 +1,188 @@
+default.fg = #c5c8c6
+default.bg = #181818
+
+error.fg = #d75f87
+error.bg = #181818
+error.bold = true
+
+warning.fg = #d78700
+warning.bg = #181818
+warning.bold = true
+
+success.fg = #5faf5f
+success.bg = #181818
+success.bold = true
+
+title.fg = #c5c8c6
+title.bg = #1e1e1e
+title.bold = true
+title.reverse = false
+
+header.fg = #87afd7
+header.bg = #1e1e1e
+header.bold = true
+header.reverse = false
+
+statusline_default.fg = #c5c8c6
+statusline_default.bg = #1e1e1e
+statusline_default.reverse = false
+
+statusline_error.fg = #d75f87
+statusline_error.bg = #1e1e1e
+statusline_error.bold = true
+statusline_error.reverse = false
+
+statusline_success.fg = #5faf5f
+statusline_success.bg = #1e1e1e
+statusline_success.bold = true
+statusline_success.reverse = false
+
+border.fg = #282a2e
+border.bg = #181818
+
+tab.fg = #a8a19f
+tab.bg = #1e1e1e
+tab.reverse = false
+
+tab.selected.fg = #1b1918
+tab.selected.bg = #6c6c6c
+tab.selected.bold = true
+tab.selected.reverse = false
+
+stack.fg = #c5c8c6
+stack.bg = #1e1e1e
+stack.reverse = false
+
+spinner.fg = #87afd7
+spinner.bg = #181818
+
+dirlist_default.fg = #707880
+dirlist_default.bg = #1e1e1e
+
+dirlist_unread.fg = #c5c8c6
+dirlist_unread.bg = #1e1e1e
+dirlist_unread.bold = true
+
+dirlist_recent.fg = #5fafff
+dirlist_recent.bg = #1e1e1e
+
+dirlist_default.selected.fg = #87afd7
+dirlist_default.selected.bg = #373b41
+dirlist_default.selected.bold = true
+
+dirlist_unread.selected.fg = #c5c8c6
+dirlist_unread.selected.bg = #373b41
+dirlist_unread.selected.bold = true
+
+dirlist_recent.selected.fg = #5fafff
+dirlist_recent.selected.bg = #373b41
+dirlist_recent.selected.bold = true
+
+msglist_default.fg = default
+msglist_default.bg = #181818
+
+msglist_unread.fg = default
+msglist_unread.bg = #181818
+msglist_unread.bold = true
+
+msglist_read.fg = #a8a19f
+msglist_read.bg = #181818
+
+msglist_flagged.fg = default
+msglist_flagged.bg = #181818
+msglist_flagged.bold = true
+
+msglist_deleted.fg = #707880
+msglist_deleted.bg = #181818
+
+msglist_marked.fg = default
+msglist_marked.bg = #181818
+msglist_marked.bold = true
+
+msglist_result.fg = default
+msglist_result.bg = #181818
+msglist_result.bold = true
+
+msglist_default.selected.fg = default
+msglist_default.selected.bg = #2b3036
+msglist_default.selected.bold = true
+msglist_default.selected.reverse = false
+
+msglist_unread.selected.fg = default
+msglist_unread.selected.bg = #2b3036
+msglist_unread.selected.bold = true
+msglist_unread.selected.reverse = false
+
+msglist_read.selected.fg = default
+msglist_read.selected.bg = #2b3036
+msglist_read.selected.bold = true
+msglist_read.selected.reverse = false
+
+msglist_flagged.selected.fg = default
+msglist_flagged.selected.bg = #2b3036
+msglist_flagged.selected.bold = true
+msglist_flagged.selected.reverse = false
+
+msglist_deleted.selected.fg = default
+msglist_deleted.selected.bg = #2b3036
+msglist_deleted.selected.bold = true
+msglist_deleted.selected.reverse = false
+
+msglist_marked.selected.fg = default
+msglist_marked.selected.bg = #2b3036
+msglist_marked.selected.bold = true
+msglist_marked.selected.reverse = false
+
+msglist_result.selected.fg = default
+msglist_result.selected.bg = #2b3036
+msglist_result.selected.bold = true
+msglist_result.selected.reverse = false
+
+completion_default.fg = #c5c8c6
+completion_default.bg = #181818
+
+completion_gutter.fg = #707880
+completion_gutter.bg = #181818
+
+completion_pill.fg = #1b1918
+completion_pill.bg = #5faf5f
+completion_pill.bold = true
+
+selector_default.fg = #a8a19f
+selector_default.bg = #181818
+
+selector_focused.fg = #5faf5f
+selector_focused.bg = #373b41
+selector_focused.bold = true
+
+selector_chooser.fg = #5faf5f
+selector_chooser.bg = #181818
+
+[user]
+sender.fg = #cd3131
+
+sender-unread.fg = #f14c4c
+sender-unread.bold = true
+
+date.fg = #e5e510
+
+date-unread.fg = #f5f543
+date-unread.bold = true
+
+subject.fg = #0dbc79
+
+subject-unread.fg = #23d18b
+subject-unread.bold = true
+
+list-sender.fg = #cd3131
+list-sender.bold = true
+
+list-date.fg = #e5e510
+
+dim.fg = #707880
+
+unread.fg = #c5c8c6
+unread.bold = true
+
+link.fg = #5fafff
+link.underline = true

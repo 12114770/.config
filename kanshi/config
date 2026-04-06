@@ -1,0 +1,33 @@
+profile undocked {
+  output eDP-1 enable position 0,0 scale 1.5
+}
+
+profile docked-dp {
+  output eDP-1 disable
+  output DP-1 enable position 0,0 scale 1
+}
+
+profile docked-dp-4 {
+  output eDP-1 disable
+  output DP-4 enable position 0,0 scale 1
+}
+
+profile docked-dp-5 {
+  output eDP-1 disable
+  output DP-5 enable position 0,0 scale 1
+}
+
+profile docked-displayport-0 {
+  output eDP-1 disable
+  output DisplayPort-0 enable position 0,0 scale 1
+}
+
+profile docked-hdmi {
+  output eDP-1 disable
+  output HDMI-A-1 enable position 0,0 scale 1
+}
+
+profile docked-hdmi-a-0 {
+  output eDP-1 disable
+  output HDMI-A-0 enable position 0,0 scale 1
+}

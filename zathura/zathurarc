@@ -1,0 +1,61 @@
+# Zathura configuration file
+# See man `man zathurarc'
+
+# Open document in fit-width mode by default
+set adjust-open "best-fit"
+
+# One page per row by default
+set pages-per-row 1
+
+#stop at page boundries
+set scroll-page-aware "true"
+set scroll-full-overlap 0.01
+set scroll-step 500
+
+#zoom settings
+set ctrl-wheel-zoom "true"
+set zoom-min 10
+set guioptions "sv"
+set selection-clipboard "clipboard"
+
+# zathurarc-dark
+
+set default-bg "#1e1e1e" #00
+set default-fg "#cdd6f4" #01
+
+set statusbar-fg "#cdd6f4" #04
+set statusbar-bg "#313244" #01
+
+set inputbar-bg "#313244" #00 currently not used
+set inputbar-fg "#cdd6f4" #02
+
+set notification-error-bg "#f38ba8" #08
+set notification-error-fg "#cdd6f4" #00
+
+set notification-warning-bg "#f9e2af" #08
+set notification-warning-fg "#cdd6f4" #00
+
+set highlight-color "rgba(49,50,68,0.5)" #0A
+set highlight-active-color "rgba(69,71,90,0.5)" #0D
+
+set completion-highlight-fg "#1e1e2e" #02
+set completion-highlight-bg "#cdd6f4" #0C
+
+set completion-bg "#313244" #02
+set completion-fg "#cdd6f4" #0C
+
+set notification-bg "#313244" #0B
+set notification-fg "#cdd6f4" #00
+
+set recolor "false"
+set recolor-lightcolor "#2e2e2e"
+set recolor-darkcolor "#e0e0e0"
+set recolor-reverse-video "true"
+set recolor-keephue "true"
+
+
+set render-loading "false"
+set scroll-step 50
+unmap f
+map f toggle_fullscreen
+map [fullscreen] f toggle_fullscreen

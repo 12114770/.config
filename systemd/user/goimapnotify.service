@@ -1,0 +1,12 @@
+[Unit]
+Description=IMAP IDLE mail watcher
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=%h/.local/bin/goimapnotify -conf %h/.config/goimapnotify/goimapnotify.yaml -log-level warn -wait 2
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target

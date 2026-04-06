@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenVINO NPU LLM Server
+After=default.target
+
+[Service]
+ExecStart=/home/lukas/ai/start-npu.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

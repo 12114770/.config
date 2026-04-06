@@ -1,0 +1,54 @@
+{
+  "layer": "top",
+  "position": "top",
+
+  "modules-left": ["sway/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": ["pulseaudio", "network", "bluetooth", "custom/battery"],
+
+  "network": {
+    "format-wifi": "   {essid}",
+    "format-ethernet": "󰈀  Ethernet",
+    "format-disconnected": "󰖪  Offline",
+    "tooltip": true,
+    "on-click": "/home/lukas/.config/waybar/scripts/toggle-gazelle.sh"
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": " {volume}%",
+    "format-muted": "󰝟 Muted",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["󰕿", "󰖀", "󰕾"]
+    },
+    "scroll-step": 5,
+    "tooltip": true,
+    "tooltip-format": "{desc} {volume}%",
+    "on-click": "/home/lukas/.config/waybar/scripts/toggle-pulsemixer.sh",
+    "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+  },
+
+  "bluetooth": {
+    "format": " ",
+    "format-disabled": "",
+    "format-connected": " {num_connections}",
+    "tooltip": false,
+    "on-click": "/home/lukas/.config/waybar/scripts/toggle-bluetui.sh"
+  },
+  "custom/battery": {
+    "exec": "/home/lukas/.config/waybar/scripts/battery-monitor.sh",
+    "return-type": "json",
+    "format": "{}",
+    "on-click": "/home/lukas/.config/waybar/scripts/toggle-battery-tui.sh"
+  },
+
+  "clock": {
+    "format": "{:%H:%M  %d.%m.}"
+  }
+}

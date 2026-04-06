@@ -1,0 +1,67 @@
+@define-color clear rgba(0, 0, 0, 0.0);
+
+@define-color fg #ffffff;
+@define-color bg rgba(45, 45, 45, 0.96);
+@define-color brd #6b6b6b;
+@define-color ip_bg rgba(0, 0, 0, 0.96);
+@define-color slt_bg #000000;
+@define-color row_bg rgba(0, 0, 0, 0.96);
+@define-color row_brd #4f4f4f;
+
+window {
+    border: 4px solid @brd;
+    background-color: @bg;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font";
+}
+
+#input {
+    padding: 8px 12px;
+    margin: 8px;
+    border: 2px solid @row_brd;
+    border-radius: 0;
+    color: @fg;
+    background-color: @ip_bg;
+    outline: none;
+}
+
+#outer-box {
+    margin: 16px;
+    border: none;
+    border-radius: 0;
+    background-color: @clear;
+}
+
+#inner-box {
+    margin: 6px;
+    border: none;
+    border-radius: 0;
+    background-color: @clear;
+}
+
+#scroll {
+    margin: 0px;
+    border: none;
+}
+
+#entry {
+    margin: 2px 6px;
+    padding: 8px 10px;
+    border: 2px solid @row_brd;
+    border-radius: 0;
+    background-color: @row_bg;
+}
+
+#entry:selected {
+    background-color: @slt_bg;
+    border-color: @brd;
+}
+
+#text {
+    margin-left: 8px;
+    color: #dddddd;
+}
+
+#text:selected {
+    color: @fg;
+}

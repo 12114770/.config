@@ -1,0 +1,1 @@
+lukas ALL=(root) NOPASSWD: /usr/sbin/modprobe -r psmouse, /usr/sbin/modprobe psmouse

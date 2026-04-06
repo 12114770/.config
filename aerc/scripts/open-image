@@ -1,0 +1,11 @@
+#!/bin/sh
+
+file=$1
+
+if [ -n "${KITTY_WINDOW_ID:-}" ] && command -v kitty >/dev/null 2>&1; then
+    if kitty @ launch --type=overlay --title "aerc image" --hold -- /usr/bin/kitten icat --stdin=no --hold "$file" >/dev/null 2>&1; then
+        exit 0
+    fi
+fi
+
+exec imv "$file"

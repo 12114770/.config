@@ -1,0 +1,13 @@
+[Unit]
+Description=Periodic local mail sync
+
+[Timer]
+OnBootSec=1m
+OnUnitActiveSec=15m
+AccuracySec=5m
+RandomizedDelaySec=2m
+Persistent=true
+Unit=mail-sync.service
+
+[Install]
+WantedBy=timers.target
