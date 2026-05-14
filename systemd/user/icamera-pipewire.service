@@ -1,0 +1,16 @@
+[Unit]
+Description=Intel IPU7 Camera on-demand watcher
+PartOf=graphical-session.target
+After=pipewire.service wireplumber.service
+
+[Service]
+Environment=PATH=/home/lukas/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/lukas/.local/bin/icamera-on-demand-watcher
+KillMode=control-group
+TimeoutStopSec=3
+Restart=always
+RestartSec=1
+SuccessExitStatus=143
+
+[Install]
+WantedBy=graphical-session.target

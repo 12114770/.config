@@ -11,6 +11,7 @@
 !alacritty/
 !aerc/
 !autostart/
+!bash/
 !btop/
 !cava/
 !gtk-3.0/
@@ -39,6 +40,7 @@
 !alacritty/**
 !aerc/**
 !autostart/**
+!bash/**
 !btop/**
 !cava/**
 !gtk-3.0/**
@@ -65,6 +67,7 @@
 **/accounts.imap.backup.conf
 **/accounts.maildir.conf
 **/accounts.maildir.active.conf
+**/accounts.maildir.conf.bak
 **/accounts.notmuch.conf
 **/mbsyncrc
 **/gmx-password

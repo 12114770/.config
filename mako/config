@@ -42,7 +42,6 @@ layer=overlay
 anchor=bottom-center
 default-timeout=1200
 ignore-timeout=0
-width=190
 outer-margin=0,0,18,0
 border-color=#2472c8
 background-color=#111111
@@ -51,6 +50,7 @@ font=JetBrainsMono 12
 icons=0
 markup=0
 layer=overlay
+text-alignment=center
 
 [app-name="Spotify"]
 invisible=1

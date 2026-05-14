@@ -3,6 +3,7 @@
 set -eu
 
 BATTERY_DEV="$(upower -e | awk '/\/battery_/ { print; exit }')"
+LAST_JSON=''
 
 if [ -z "$BATTERY_DEV" ]; then
   printf '{"text":"no battery","tooltip":"No battery device found","class":["missing"]}\n'
@@ -12,10 +13,26 @@ fi
 print_status() {
   info="$(upower -i "$BATTERY_DEV")"
 
-  percentage="$(printf '%s\n' "$info" | awk -F: '/^[[:space:]]*percentage:/ { gsub(/^[[:space:]]+/, "", $2); gsub(/%/, "", $2); print $2; exit }')"
-  state="$(printf '%s\n' "$info" | awk -F: '/^[[:space:]]*state:/ { gsub(/^[[:space:]]+/, "", $2); print $2; exit }')"
-  time_to_empty="$(printf '%s\n' "$info" | awk -F: '/^[[:space:]]*time to empty:/ { gsub(/^[[:space:]]+/, "", $2); print $2; exit }')"
-  time_to_full="$(printf '%s\n' "$info" | awk -F: '/^[[:space:]]*time to full:/ { gsub(/^[[:space:]]+/, "", $2); print $2; exit }')"
+  percentage=''
+  state=''
+  time_to_empty=''
+  time_to_full=''
+
+  while IFS="$(printf '\t')" read -r key value; do
+    case "$key" in
+      percentage) percentage="$value" ;;
+      state) state="$value" ;;
+      time_to_empty) time_to_empty="$value" ;;
+      time_to_full) time_to_full="$value" ;;
+    esac
+  done <<EOF
+$(printf '%s\n' "$info" | awk -F: '
+  /^[[:space:]]*percentage:/ { gsub(/^[[:space:]]+/, "", $2); gsub(/%/, "", $2); print "percentage\t" $2 }
+  /^[[:space:]]*state:/ { gsub(/^[[:space:]]+/, "", $2); print "state\t" $2 }
+  /^[[:space:]]*time to empty:/ { gsub(/^[[:space:]]+/, "", $2); print "time_to_empty\t" $2 }
+  /^[[:space:]]*time to full:/ { gsub(/^[[:space:]]+/, "", $2); print "time_to_full\t" $2 }
+')
+EOF
 
   [ -n "$percentage" ] || percentage=0
 
@@ -88,13 +105,18 @@ print_status() {
     class="$class warning"
   fi
 
-  text_escaped="$(printf '%s' "$text" | sed 's/\\/\\\\/g; s/"/\\"/g')"
-  tooltip_escaped="$(printf '%s' "$tooltip" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+  text_escaped="$(printf '%s' "$text" | awk '{ gsub(/\\/, "\\\\"); gsub(/"/, "\\\""); print }')"
+  tooltip_escaped="$(printf '%s' "$tooltip" | awk '{ gsub(/\\/, "\\\\"); gsub(/"/, "\\\""); print }')"
 
-  printf '{"text":"%s","tooltip":"%s","class":["%s"]}\n' "$text_escaped" "$tooltip_escaped" "$class"
+  json="$(printf '{"text":"%s","tooltip":"%s","class":["%s"]}' "$text_escaped" "$tooltip_escaped" "$class")"
+
+  if [ "$json" != "$LAST_JSON" ]; then
+    printf '%s\n' "$json"
+    LAST_JSON="$json"
+  fi
 }
 
 print_status
-upower --monitor-detail | while IFS= read -r _line; do
+upower --monitor | while IFS= read -r _line; do
   print_status
 done

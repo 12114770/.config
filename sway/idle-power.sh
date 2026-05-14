@@ -48,9 +48,32 @@ dpms_on_now() {
     swaymsg 'output * dpms on' >/dev/null
 }
 
+has_active_external_output() {
+    if ! command -v swaymsg >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+        return 1
+    fi
+
+    swaymsg -t get_outputs -r 2>/dev/null | jq -e '
+        map(select(
+            .active == true and
+            (.name | test("^(eDP|LVDS|DSI)"; "i") | not)
+        ))
+        | length > 0
+    ' >/dev/null 2>&1
+}
+
 suspend_now() {
     ${LOCK_CMD} &
     systemctl suspend
+}
+
+handle_lid_close() {
+    if has_active_external_output; then
+        log_msg "ignoring lid close because an external output is active"
+        return 0
+    fi
+
+    lock_now
 }
 
 schedule_suspend_in_five_minutes() {
@@ -66,7 +89,13 @@ schedule_suspend_in_five_minutes() {
     (
         sleep 300
         rm -f "${DELAYED_SUSPEND_PIDFILE}"
-        systemctl suspend
+
+        if session_is_idle; then
+            log_msg "suspending after delayed lock because session is still idle"
+            systemctl suspend
+        else
+            log_msg "cancelled delayed suspend because session became active"
+        fi
     ) >/dev/null 2>&1 &
     printf '%s\n' "$!" > "${DELAYED_SUSPEND_PIDFILE}"
     log_msg "scheduled suspend in 5 minutes"
@@ -79,6 +108,31 @@ suspend_if_allowed() {
     fi
 
     suspend_now
+}
+
+hibernate_if_allowed() {
+    if media_playing; then
+        log_msg "skipping hibernate because media is playing"
+        return 0
+    fi
+
+    ${LOCK_CMD} &
+    systemctl hibernate
+}
+
+suspend_then_hibernate_if_on_battery() {
+    if on_ac_power; then
+        log_msg "skipping suspend-then-hibernate because AC power is connected"
+        return 0
+    fi
+
+    if media_playing; then
+        log_msg "skipping suspend-then-hibernate because media is playing"
+        return 0
+    fi
+
+    ${LOCK_CMD} &
+    systemctl suspend-then-hibernate
 }
 
 case "${1:-}" in
@@ -98,12 +152,24 @@ case "${1:-}" in
         suspend_now
         exit 0
         ;;
+    handle-lid-close)
+        handle_lid_close
+        exit 0
+        ;;
     lock-then-suspend)
         schedule_suspend_in_five_minutes
         exit 0
         ;;
     suspend-if-allowed)
         suspend_if_allowed
+        exit 0
+        ;;
+    hibernate-if-allowed)
+        hibernate_if_allowed
+        exit 0
+        ;;
+    suspend-then-hibernate-if-on-battery)
+        suspend_then_hibernate_if_on_battery
         exit 0
         ;;
 esac
@@ -146,6 +212,14 @@ on_ac_power() {
     return 1
 }
 
+session_is_idle() {
+    session_id=${XDG_SESSION_ID:-}
+    [ -n "${session_id}" ] || return 0
+
+    idle_hint=$(loginctl show-session "${session_id}" -p IdleHint --value 2>/dev/null || true)
+    [ "${idle_hint}" = "yes" ]
+}
+
 start_swayidle() {
     mode="$1"
 
@@ -157,19 +231,21 @@ start_swayidle() {
     if [ "${mode}" = "ac" ]; then
         lock_timeout=1200
         dpms_timeout=1800
-        suspend_timeout=7200
+        suspend_timeout=36000
+        sleep_action="${SCRIPT_PATH} hibernate-if-allowed"
     else
         lock_timeout=600
         dpms_timeout=900
-        suspend_timeout=2700
+        suspend_timeout=36000
+        sleep_action="${SCRIPT_PATH} hibernate-if-allowed"
     fi
 
-    log_msg "starting swayidle mode=${mode} lock=${lock_timeout}s dpms=${dpms_timeout}s suspend=${suspend_timeout}s"
+    log_msg "starting swayidle mode=${mode} lock=${lock_timeout}s dpms=${dpms_timeout}s hibernate=${suspend_timeout}s"
 
     swayidle -w \
         before-sleep "${LOCK_CMD}" \
         timeout "${lock_timeout}" "${SCRIPT_PATH} lock-now" \
-        timeout "${suspend_timeout}" "${SCRIPT_PATH} suspend-if-allowed" &
+        timeout "${suspend_timeout}" "${sleep_action}" &
 
     child_pid="$!"
 }

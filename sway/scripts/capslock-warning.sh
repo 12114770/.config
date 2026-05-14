@@ -13,7 +13,7 @@ get_caps_on() {
 }
 
 active_ids() {
-    makoctl list 2>/dev/null | python3 -c '
+    makoctl list -j 2>/dev/null | python3 -c '
 import json, sys
 
 try:
@@ -21,11 +21,21 @@ try:
 except Exception:
     raise SystemExit(0)
 
-for group in payload.get("data", []):
+if isinstance(payload, dict):
+    groups = payload.get("data", [])
+else:
+    groups = [payload]
+
+for group in groups:
     for item in group:
-        app = item.get("app-name", {}).get("data")
+        app = item.get("app_name")
+        if app is None:
+            app = item.get("app-name", {}).get("data")
         if app == "capslock-warning":
-            print(item.get("id", {}).get("data", ""))
+            notification_id = item.get("id")
+            if isinstance(notification_id, dict):
+                notification_id = notification_id.get("data", "")
+            print(notification_id or "")
 '
 }
 
@@ -33,6 +43,18 @@ dismiss_notification() {
     active_ids | while IFS= read -r id; do
         [ -n "$id" ] && makoctl dismiss -n "$id" >/dev/null 2>&1 || true
     done
+}
+
+has_notification() {
+    active_ids | grep -q '.'
+}
+
+caps_state() {
+    if get_caps_on; then
+        printf 'on\n'
+    else
+        printf 'off\n'
+    fi
 }
 
 show_notification() {
@@ -53,30 +75,42 @@ check_capslock() {
     fi
 }
 
-if [ "$1" = "--toggle" ]; then
-    dismiss_notification
-    sleep 0.15
-    check_capslock
-elif [ "$1" = "--watch" ]; then
-    last_state=""
-    while :; do
-        if get_caps_on; then
-            state="on"
+sync_after_toggle() {
+    stable_state=""
+    stable_count=0
+    attempts=0
+
+    while [ "$attempts" -lt 10 ]; do
+        state=$(caps_state)
+
+        if [ "$state" = "$stable_state" ]; then
+            stable_count=$((stable_count + 1))
         else
-            state="off"
+            stable_state="$state"
+            stable_count=1
         fi
 
-        if [ "$state" != "$last_state" ]; then
-            if [ "$state" = "on" ]; then
-                show_notification
-            else
-                dismiss_notification
-            fi
-            last_state="$state"
+        if [ "$stable_count" -ge 2 ]; then
+            break
         fi
 
-        sleep 0.25
+        attempts=$((attempts + 1))
+        sleep 0.05
     done
+
+    if [ "$stable_state" = "on" ]; then
+        show_notification
+    else
+        dismiss_notification
+    fi
+}
+
+if [ "$1" = "--toggle" ]; then
+    if has_notification; then
+        dismiss_notification
+    else
+        show_notification
+    fi
 else
     check_capslock
 fi

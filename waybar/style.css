@@ -4,7 +4,7 @@
 }
 
 window#waybar {
-  background: #323232;
+  background: #000000;
   color: #ffffff;
 }
 
@@ -36,4 +36,10 @@ window#waybar {
 #workspaces button.urgent {
     background: transparent;
     color: #d65d5d;
+}
+
+#workspaces button:hover {
+    background: transparent;
+    box-shadow: none;
+    border: none;
 }

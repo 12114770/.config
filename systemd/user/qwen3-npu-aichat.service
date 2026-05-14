@@ -1,11 +1,12 @@
 [Unit]
-Description=OpenVINO NPU LLM Server
+Description=Local Qwen3 NPU OpenAI bridge
 After=default.target
 
 [Service]
+Type=simple
 ExecStart=/home/lukas/drivers/qwen3-8b-fresh/run-openai-server.sh
 Restart=on-failure
-RestartSec=5
+RestartSec=2
 
 [Install]
 WantedBy=default.target

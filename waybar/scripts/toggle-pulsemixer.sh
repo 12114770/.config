@@ -7,4 +7,4 @@ if pgrep -f "alacritty --title ${TITLE}" >/dev/null; then
   exit 0
 fi
 
-exec alacritty --title "$TITLE" -e /home/lukas/.local/bin/pulsemixer
+exec alacritty --title "$TITLE" -e /usr/bin/pulsemixer

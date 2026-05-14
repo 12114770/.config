@@ -14,11 +14,11 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term /home/lukas/.local/bin/kitty --single-instance --instance-group sway-main
+set $term /usr/local/bin/kitty --single-instance --instance-group sway-main
 # Your preferred application launcher
 set $menu exec /home/lukas/.config/sway/scripts/dmenu-toggle.sh toggle
 set $cursor_theme DMZ-White-Patched
-set $cursor_size 24
+set $cursor_size 26
   include /etc/sway/config-vars.d/*
 
 ### Output configuration
@@ -59,10 +59,11 @@ client.urgent           #cd3131 #1e1e1e #ffffff #cd3131 #cd3131
 #
  exec_always --no-startup-id /home/lukas/.config/sway/idle-power.sh
  exec_always --no-startup-id lxqt-policykit-agent
-
+ exec ~/.config/sway/keepassxc-unlock.sh
+ exec --no-startup-id synology-drive autostart
 # Brightness keys
 #
-# This locks and suspends after 30 minutes on AC power or 5 minutes on battery.
+# Automatic idle power handling lives in ~/.config/sway/idle-power.sh.
 # It also locks before the computer goes to sleep.
   exec_always --no-startup-id kanshi
   exec_always --no-startup-id dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XCURSOR_THEME=$cursor_theme XCURSOR_SIZE=$cursor_size
@@ -113,6 +114,8 @@ input type:touchpad {
     scroll_factor 1.0
     tap enabled
     tap_button_map lrm
+    drag enabled
+    drag_lock disabled
     dwt enabled
 }
 
@@ -129,7 +132,7 @@ bindsym --locked Caps_Lock exec /home/lukas/.config/sway/scripts/capslock-warnin
     bindsym XF86MonBrightnessUp exec /home/lukas/.config/sway/scripts/tui-osd.sh brightness-up
     bindsym XF86MonBrightnessDown exec /home/lukas/.config/sway/scripts/tui-osd.sh brightness-down
     bindsym $mod+Ctrl+l exec /home/lukas/.config/sway/idle-power.sh lock-then-suspend
-    bindswitch --reload --locked lid:on exec /home/lukas/.config/sway/idle-power.sh suspend-now
+    bindswitch --reload --locked lid:on exec /home/lukas/.config/sway/idle-power.sh handle-lid-close
 
 # Mod+Shift+s → region screenshot → open satty
     bindsym $mod+Shift+s exec ~/.config/sway/satty-shot

@@ -3,10 +3,11 @@ Description=DP audio keepalive (prevents monitor audio wake delay)
 After=pipewire.service wireplumber.service
 Before=sleep.target
 Conflicts=sleep.target
+ConditionPathExists=/home/lukas/.local/bin/dp-audio-keepalive
 
 [Service]
 ExecStart=/home/lukas/.local/bin/dp-audio-keepalive
-Restart=always
+Restart=on-failure
 RestartSec=2
 
 [Install]

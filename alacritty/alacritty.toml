@@ -1,6 +1,6 @@
 [general]
 import = [
-  "~/.config/alacritty/themes/alacritty-theme/themes/vscode.toml"
+  "~/.config/alacritty/themes/alacritty-theme/vscode.toml"
 ]
 
 [font]

@@ -1,0 +1,608 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+*i*) ;;
+*) return ;;
+esac
+
+if [ -d "$HOME/.local/bin" ]; then
+  PATH="$HOME/.local/bin:$PATH"
+fi
+
+export CODEX_HOME="$HOME/.codex"
+
+bind '"\C-h": backward-kill-word'
+bind '"\C-?": backward-kill-word'
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+  debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+xterm-color | *-256color) color_prompt=yes ;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+  else
+    color_prompt=
+  fi
+fi
+
+__bashrc_color_prompt="$color_prompt"
+
+__git_prompt_branch() {
+  local branch
+
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return
+  branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null) || return
+  [ -n "$branch" ] || return
+
+  printf '%s' "$branch"
+}
+
+__set_git_ps1() {
+  local branch branch_segment
+
+  if branch=$(__git_prompt_branch); then
+    if [ "$__bashrc_color_prompt" = yes ]; then
+      branch_segment="\[\033[01;31m\](${branch})\[\033[00m\]"
+    else
+      branch_segment="(${branch})"
+    fi
+  else
+    branch_segment=
+  fi
+
+  if [ "$__bashrc_color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]'"$branch_segment"'\$ '
+  else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w'"$branch_segment"'\$ '
+  fi
+
+  case "$TERM" in
+  xterm* | rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+  esac
+}
+
+__set_git_ps1
+case ";${PROMPT_COMMAND:-};" in
+  *";__set_git_ps1;"*) ;;
+  ";;")
+    PROMPT_COMMAND="__set_git_ps1"
+    ;;
+  *)
+    PROMPT_COMMAND="__set_git_ps1; $PROMPT_COMMAND"
+    ;;
+esac
+unset color_prompt force_color_prompt
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+  #alias dir='dir --color=auto'
+  #alias vdir='vdir --color=auto'
+
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias j='joshuto'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+export QSYS_ROOTDIR="/home/lukas/drivers/intelfpga_lite/22.1std/quartus/sopc_builder/bin"
+
+# Added by Quartus Prime software
+export SALT_LICENSE_FILE="$SALT_LICENSE_FILE;/home/lukas/.altera.quartus/questa_lic.dat"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+export PATH="$HOME/drivers/intelfpga_lite/22.1std/quartus/bin:$PATH"
+. "$HOME/.cargo/env"
+source ~/.bash_completion/alacritty
+
+_alacritty_clone_detect_pid() {
+  local pid="$$"
+  local parent comm
+
+  while [ "$pid" -gt 1 ] 2>/dev/null; do
+    comm=$(ps -p "$pid" -o comm= 2>/dev/null | tr -d '[:space:]')
+    if [ "$comm" = "alacritty" ]; then
+      printf '%s\n' "$pid"
+      return 0
+    fi
+    parent=$(ps -p "$pid" -o ppid= 2>/dev/null | tr -d '[:space:]')
+    if [ -z "$parent" ] || [ "$parent" = "$pid" ]; then
+      break
+    fi
+    pid="$parent"
+  done
+
+  return 1
+}
+
+_alacritty_clone_state_file() {
+  local window_pid="${ALACRITTY_CLONE_WINDOW_PID:-}"
+  if [ -z "$window_pid" ]; then
+    window_pid=$(_alacritty_clone_detect_pid 2>/dev/null) || return 1
+    ALACRITTY_CLONE_WINDOW_PID="$window_pid"
+    export ALACRITTY_CLONE_WINDOW_PID
+  fi
+  printf '%s/alacritty-clone/%s\n' "${XDG_STATE_HOME:-$HOME/.local/state}" "$window_pid"
+}
+
+_alacritty_clone_prune_state() {
+  local state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/alacritty-clone"
+  local entry name
+
+  [ -d "$state_dir" ] || return
+  rm -f "$state_dir/current"
+
+  for entry in "$state_dir"/*; do
+    [ -e "$entry" ] || continue
+    name=${entry##*/}
+    case "$name" in
+      ''|*[!0-9]*)
+        continue
+        ;;
+    esac
+    kill -0 "$name" 2>/dev/null || rm -f "$entry"
+  done
+}
+
+_alacritty_clone_write_state() {
+  local mode="$1"
+  local user="$2"
+  local host="$3"
+  local cwd="$4"
+  local target="${5:-}"
+  local state_file state_dir
+
+  state_file=$(_alacritty_clone_state_file) || return
+  state_dir=${state_file%/*}
+  mkdir -p "$state_dir" 2>/dev/null || return
+
+  {
+    printf 'mode=%q\n' "$mode"
+    printf 'user=%q\n' "$user"
+    printf 'host=%q\n' "$host"
+    printf 'cwd=%q\n' "$cwd"
+    printf 'target=%q\n' "$target"
+  } > "$state_file"
+}
+
+_alacritty_clone_local_prompt() {
+  [ -n "${SSH_CONNECTION:-}" ] && return
+  if [ -z "${ALACRITTY_CLONE_PRUNED:-}" ]; then
+    _alacritty_clone_prune_state
+    ALACRITTY_CLONE_PRUNED=1
+    export ALACRITTY_CLONE_PRUNED
+  fi
+  _alacritty_clone_write_state \
+    local \
+    "$(id -un 2>/dev/null || printf '%s' "${USER:-$LOGNAME}")" \
+    "$(hostname -f 2>/dev/null || hostname 2>/dev/null || printf '%s' "${HOSTNAME:-localhost}")" \
+    "$PWD"
+}
+
+case ";${PROMPT_COMMAND:-};" in
+  *";_alacritty_clone_local_prompt;"*) ;;
+  ";;")
+    PROMPT_COMMAND="_alacritty_clone_local_prompt"
+    ;;
+  *)
+    PROMPT_COMMAND="_alacritty_clone_local_prompt; $PROMPT_COMMAND"
+    ;;
+esac
+
+ssh() {
+  local host_seen=0
+  local needs_value=0
+  local arg target=""
+  local window_pid state_file port listener_pid remote_script remote_cmd
+
+  for arg in "$@"; do
+    if [ "$host_seen" -eq 1 ]; then
+      command ssh "$@"
+      return
+    fi
+
+    if [ "$needs_value" -eq 1 ]; then
+      needs_value=0
+      continue
+    fi
+
+    case "$arg" in
+      --)
+        host_seen=1
+        ;;
+      -[1246AaCfGgKkMNnqsTtVvXxYy]*)
+        case "$arg" in
+          *N*|*T*)
+            command ssh "$@"
+            return
+            ;;
+        esac
+        ;;
+      -[BbcDEeFIiJLlmOopQRSWw])
+        needs_value=1
+        ;;
+      -[BbcDEeFIiJLlmOopQRSWw]?*)
+        ;;
+      -*)
+        command ssh "$@"
+        return
+        ;;
+      *)
+        target="$arg"
+        host_seen=1
+        ;;
+    esac
+  done
+
+  if [ "$host_seen" -eq 0 ]; then
+    command ssh "$@"
+    return
+  fi
+
+  window_pid=${ALACRITTY_CLONE_WINDOW_PID:-}
+  if [ -z "$window_pid" ]; then
+    window_pid=$(_alacritty_clone_detect_pid 2>/dev/null) || {
+      command ssh "$@"
+      return
+    }
+    ALACRITTY_CLONE_WINDOW_PID="$window_pid"
+    export ALACRITTY_CLONE_WINDOW_PID
+  fi
+
+  state_file=$(_alacritty_clone_state_file) || {
+    command ssh "$@"
+    return
+  }
+
+  port=$(python3 - <<'PY'
+import socket
+
+sock = socket.socket()
+sock.bind(('127.0.0.1', 0))
+print(sock.getsockname()[1])
+sock.close()
+PY
+)
+
+  listener_pid=$(python3 - <<'PY' "$HOME/.local/bin/alacritty-clone-listener" "$port" "$state_file"
+import subprocess
+import sys
+
+proc = subprocess.Popen(
+    [sys.argv[1], '--port', sys.argv[2], '--state-file', sys.argv[3]],
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL,
+    start_new_session=True,
+)
+print(proc.pid)
+PY
+)
+
+  remote_script=$(cat <<EOF
+_alacritty_clone_remote_prompt() {
+  local payload host user
+  host=$(hostname -f 2>/dev/null || hostname 2>/dev/null || printf '%s' "${HOSTNAME:-remote}")
+  user=$(id -un 2>/dev/null || printf '%s' "${USER:-$LOGNAME}")
+  payload=$(printf '%s\037%s\037%s\037%s\037%s' ssh "$user" "$host" "$PWD" "${ALACRITTY_CLONE_TARGET:-}" | base64 | tr -d '\n')
+  exec 9<>/dev/tcp/127.0.0.1/${ALACRITTY_CLONE_PORT} || return
+  printf '%s\n' "$payload" >&9
+  exec 9>&-
+  exec 9<&-
+}
+export ALACRITTY_CLONE_PORT=$port
+export ALACRITTY_CLONE_TARGET=$(printf '%q' "$target")
+export -f _alacritty_clone_remote_prompt
+PROMPT_COMMAND=_alacritty_clone_remote_prompt
+export PROMPT_COMMAND
+exec bash -i
+EOF
+)
+  remote_cmd=$(printf 'bash -lc %q' "$remote_script")
+
+  cleanup() {
+    kill "$listener_pid" 2>/dev/null || true
+  }
+  trap cleanup RETURN
+
+  command ssh -R "$port:127.0.0.1:$port" -t "$@" "$remote_cmd"
+}
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+case ":$PATH:" in
+*:/home/lukas/.juliaup/bin:*) ;;
+
+*)
+  export PATH=/home/lukas/.juliaup/bin${PATH:+:${PATH}}
+  ;;
+esac
+
+# <<< juliaup initialize <<<
+
+# Created by `pipx` on 2026-02-25 21:46:57
+
+unalias j 2>/dev/null || true
+
+j() {
+  local output_dir="${XDG_RUNTIME_DIR:-/tmp}/joshuto-cwd-$USER-$$"
+  mkdir -p "${output_dir%/*}" || return
+
+  command joshuto --output-file "$output_dir" "$@"
+  local exit_code=$?
+
+  case "$exit_code" in
+    0)
+      ;;
+    101)
+      if [ -f "$output_dir" ]; then
+        local new_dir
+        new_dir=$(<"$output_dir")
+        [ -n "$new_dir" ] && cd "$new_dir" || return
+      fi
+      ;;
+    *)
+      return "$exit_code"
+      ;;
+  esac
+
+  rm -f "$output_dir"
+}
+export PATH="$PATH:/home/lukas/.local/bin"
+
+# opencode
+export PATH=/home/lukas/.opencode/bin:$PATH
+export PATH=/opt/tools/oss-cad-suite/bin:$PATH
+export PATH="/opt/riscv-gcc/bin:$PATH"
+
+export DRIVERS_HOME="$HOME/drivers"
+
+for legacy_go_path in "$HOME/go/bin" "$HOME/.local/go/bin" "/usr/local/go/bin"; do
+  PATH=":$PATH:"
+  PATH="${PATH//:$legacy_go_path:/:}"
+  PATH="${PATH#:}"
+  PATH="${PATH%:}"
+done
+unset legacy_go_path
+
+export GOPATH="$DRIVERS_HOME/go"
+export GOBIN="$GOPATH/bin"
+export GOMODCACHE="$GOPATH/pkg/mod"
+export GOCACHE="$DRIVERS_HOME/.cache/go-build"
+export AURDEST="$DRIVERS_HOME/.cache/yay"
+export PATH="$GOBIN${PATH:+:$PATH}"
+
+yay() {
+  XDG_CONFIG_HOME="$DRIVERS_HOME/.config" \
+  XDG_CACHE_HOME="$DRIVERS_HOME/.cache" \
+  AURDEST="$AURDEST" \
+  command yay "$@"
+}
+
+_pacman_args_include() {
+  local needle="$1"
+  shift
+
+  local arg
+  for arg in "$@"; do
+    case "$arg" in
+      --)
+        return 1
+        ;;
+      "$needle")
+        return 0
+        ;;
+      -[!-]*)
+        case "$arg" in
+          *"$needle"*)
+            return 0
+            ;;
+        esac
+        ;;
+    esac
+  done
+
+  return 1
+}
+
+_pacman_should_update_codex() {
+  _pacman_args_include --print "$@" && return 1
+  _pacman_args_include p "$@" && return 1
+  _pacman_args_include --sync "$@" || _pacman_args_include S "$@" || return 1
+  _pacman_args_include --sysupgrade "$@" || _pacman_args_include u "$@"
+}
+
+_pacman_rebuild_ipu7_acpi() {
+  command -v dkms >/dev/null 2>&1 || return 0
+  [ -d /var/lib/dkms/ipu7-drivers ] || return 0
+
+  command sudo bash -lc '
+    set -e
+
+    version=""
+    for source in /var/lib/dkms/ipu7-drivers/*/source; do
+      [ -e "$source" ] || continue
+      version=${source%/source}
+      version=${version##*/}
+      break
+    done
+
+    [ -n "$version" ] || exit 0
+
+    needs_rebuild=0
+
+    for build_dir in /usr/lib/modules/*/build; do
+      [ -e "$build_dir" ] || continue
+      kernel=${build_dir%/build}
+      kernel=${kernel##*/}
+
+      missing=0
+      for module in \
+        intel-ipu7.ko.zst \
+        intel-ipu7-isys.ko.zst \
+        intel-ipu7-psys.ko.zst \
+        ipu-acpi.ko.zst \
+        ipu-acpi-pdata.ko.zst \
+        ipu-acpi-common.ko.zst
+      do
+        [ -e "/usr/lib/modules/$kernel/updates/dkms/$module" ] || missing=1
+      done
+
+      [ "$missing" -eq 1 ] || continue
+
+      needs_rebuild=1
+      printf "Rebuilding IPU7 DKMS with ACPI modules for %s\n" "$kernel"
+      BUILD_INTEL_IPU_ACPI=1 dkms build --force "ipu7-drivers/$version" -k "$kernel"
+      BUILD_INTEL_IPU_ACPI=1 dkms install --force "ipu7-drivers/$version" -k "$kernel"
+    done
+
+    if [ "$needs_rebuild" -eq 1 ]; then
+      depmod -a
+    else
+      printf "IPU7 DKMS ACPI modules already match installed kernels; skipping rebuild\n"
+    fi
+  '
+}
+
+pacman() {
+  if [ "${EUID:-$(id -u)}" -eq 0 ]; then
+    command pacman "$@"
+  else
+    command sudo pacman "$@"
+  fi
+  local status=$?
+
+  if [ "$status" -eq 0 ] && _pacman_should_update_codex "$@"; then
+    _pacman_rebuild_ipu7_acpi
+    printf "Updating global npm and Codex packages\n"
+    command sudo npm install -g npm @openai/codex@latest
+  fi
+
+  return "$status"
+}
+
+sudo() {
+  if [ "$#" -gt 0 ] && [ "$1" = "pacman" ]; then
+    shift
+    pacman "$@"
+  else
+    command sudo "$@"
+  fi
+}
+
+case "${NNN_OPTS:-}" in
+  *d*) ;;
+  *) export NNN_OPTS="${NNN_OPTS}d" ;;
+esac
+
+y() {
+  local tmp cwd
+  tmp="$(mktemp -t "yazi-cwd.XXXXXX")" || return 1
+  command yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && [ -d "$cwd" ]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+}
+
+r() {
+  local tmp cwd
+  tmp="$(mktemp -t "ranger-cwd.XXXXXX")" || return 1
+  command ranger --choosedir="$tmp" "$@"
+  cwd="$(command cat -- "$tmp")"
+  if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && [ -d "$cwd" ]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+}
+
+export PATH=$PATH:/home/lukas/.spicetify
+
+# Bash completion
+if [ -r /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+fi

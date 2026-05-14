@@ -99,42 +99,42 @@ msglist_marked.fg = default
 msglist_marked.bg = #181818
 msglist_marked.bold = true
 
-msglist_result.fg = default
+msglist_result.fg = #5fafff
 msglist_result.bg = #181818
 msglist_result.bold = true
 
-msglist_default.selected.fg = default
-msglist_default.selected.bg = #2b3036
+msglist_default.selected.fg = #ffffff
+msglist_default.selected.bg = #3b2f46
 msglist_default.selected.bold = true
 msglist_default.selected.reverse = false
 
-msglist_unread.selected.fg = default
-msglist_unread.selected.bg = #2b3036
+msglist_unread.selected.fg = #ffffff
+msglist_unread.selected.bg = #3b2f46
 msglist_unread.selected.bold = true
 msglist_unread.selected.reverse = false
 
-msglist_read.selected.fg = default
-msglist_read.selected.bg = #2b3036
+msglist_read.selected.fg = #ffffff
+msglist_read.selected.bg = #3b2f46
 msglist_read.selected.bold = true
 msglist_read.selected.reverse = false
 
-msglist_flagged.selected.fg = default
-msglist_flagged.selected.bg = #2b3036
+msglist_flagged.selected.fg = #ffffff
+msglist_flagged.selected.bg = #3b2f46
 msglist_flagged.selected.bold = true
 msglist_flagged.selected.reverse = false
 
-msglist_deleted.selected.fg = default
-msglist_deleted.selected.bg = #2b3036
+msglist_deleted.selected.fg = #ffffff
+msglist_deleted.selected.bg = #3b2f46
 msglist_deleted.selected.bold = true
 msglist_deleted.selected.reverse = false
 
-msglist_marked.selected.fg = default
-msglist_marked.selected.bg = #2b3036
+msglist_marked.selected.fg = #ffffff
+msglist_marked.selected.bg = #3b2f46
 msglist_marked.selected.bold = true
 msglist_marked.selected.reverse = false
 
-msglist_result.selected.fg = default
-msglist_result.selected.bg = #2b3036
+msglist_result.selected.fg = #ffffff
+msglist_result.selected.bg = #3b2f46
 msglist_result.selected.bold = true
 msglist_result.selected.reverse = false
 

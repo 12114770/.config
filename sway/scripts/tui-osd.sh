@@ -1,7 +1,13 @@
 #!/bin/sh
 
 APP_NAME="tui-osd"
-BAR_WIDTH=18
+BAR_WIDTH=22
+FONT_SIZE=10      # must match font size in mako config
+# Monospace char width ≈ font_size * 0.6 (pt→logical px via Pango/96dpi)
+# Adjust CHAR_W if text clips or has too much whitespace
+CHAR_W=8
+MAKO_PADDING=0   # mako internal padding + borders on both sides
+OSD_WIDTH=$(( BAR_WIDTH * CHAR_W + MAKO_PADDING ))
 
 clamp_percent() {
     value=${1:-0}
@@ -56,11 +62,7 @@ render_box() {
         bar="$(repeat_char "$filled" '█')$(repeat_char "$empty" '░')"
     fi
 
-    label_len=${#headline}
-    pad=$(( (BAR_WIDTH - label_len) / 2 ))
-    padding="$(repeat_char "$pad" ' ')"
-
-    printf '%s%s\n%s' "$padding" "$headline" "$bar"
+    printf '%s\n%s' "$headline" "$bar"
 }
 
 show_osd() {
@@ -70,6 +72,7 @@ show_osd() {
         -a "$APP_NAME" \
         -u normal \
         -h string:x-canonical-private-synchronous:"$APP_NAME" \
+        -h "int:x-mako-width:$OSD_WIDTH" \
         "$body" \
         >/dev/null 2>&1
 }
